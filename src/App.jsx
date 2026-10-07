@@ -17,7 +17,7 @@ function App() {
   const [defaultHour, defaultMinute] = currentHHMM().split(':')
   const [hour, setHour] = useState(defaultHour)
   const [minute, setMinute] = useState(defaultMinute)
-  const [boxes, setBoxes] = useState(50)
+  const [boxes, setBoxes] = useState(180)
   const [rate] = useStoredState('rate', 2.5)
 
   const start = `${hour}:${minute}`
