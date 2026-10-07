@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import heroImg from './assets/hero.png'
+import heroImg from './assets/logo512.png'
 import Wheel from './components/Wheel'
 import { calcGoal } from './utils/unloadMath'
 import './App.css'
