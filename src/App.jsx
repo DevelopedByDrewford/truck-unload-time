@@ -3,9 +3,10 @@ import { FaBars } from 'react-icons/fa'
 import SideMenu from './components/SideMenu'
 import UnloadTime from './pages/UnloadTime'
 import Productivity from './pages/Productivity'
+import Pod from './pages/Pod'
 import './App.css'
 
-// Hash routes: "#/" (truck calculator) and "#/productivity/<category>".
+// Hash routes: "#/" (truck calculator), "#/productivity/<category>" and "#/pod/<type>".
 function currentRoute() {
   const hash = window.location.hash
   return hash.startsWith('#/') ? hash : '#/'
@@ -26,7 +27,8 @@ function App() {
   }, [])
 
   const productivityMatch = route.match(/^#\/productivity\/(\w+)/)
-  const page = productivityMatch ? productivityMatch[1] : 'unload'
+  const podMatch = route.match(/^#\/pod\/(\w+)/)
+  const page = productivityMatch ? productivityMatch[1] : podMatch ? `pod-${podMatch[1]}` : 'unload'
 
   // Per-page color theme (see App.css); also tint the mobile browser bar to match.
   useEffect(() => {
@@ -54,8 +56,8 @@ function App() {
       <SideMenu open={menuOpen} onClose={closeMenu} route={route} />
 
       <main>
-        {productivityMatch
-          ? <Productivity categoryId={productivityMatch[1]} />
+        {productivityMatch ? <Productivity categoryId={productivityMatch[1]} />
+          : podMatch ? <Pod podId={podMatch[1]} />
           : <UnloadTime />}
       </main>
     </>

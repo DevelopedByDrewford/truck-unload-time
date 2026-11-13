@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { FaTimes, FaTruck } from 'react-icons/fa'
 import { CATEGORIES } from '../utils/productivityMath'
+import { POD_TYPES } from '../utils/podMath'
 
 function MenuLink({ href, label, Icon, route, onClose, page }) {
   const active = route === href
@@ -50,6 +51,11 @@ function SideMenu({ open, onClose, route }) {
           <h3 className="menu-section">Productivity</h3>
           {CATEGORIES.map(({ id, title, Icon }) => (
             <MenuLink key={id} href={`#/productivity/${id}`} label={title} Icon={Icon} route={route} onClose={onClose} page={id} />
+          ))}
+
+          <h3 className="menu-section">Pod Calculator</h3>
+          {POD_TYPES.map(({ id, title, Icon }) => (
+            <MenuLink key={id} href={`#/pod/${id}`} label={title} Icon={Icon} route={route} onClose={onClose} page={`pod-${id}`} />
           ))}
         </nav>
       </aside>

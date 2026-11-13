@@ -73,7 +73,7 @@ function Productivity({ categoryId }) {
 
       <div className="result">
         <p>Total time: {formatDuration(minutes)}</p>
-        <h2>Goal: {Math.round(goal)} cartons</h2>
+        <h2>Goal: {(Math.round(goal * 100) / 100).toFixed(2)} cartons</h2>
       </div>
     </>
   )
