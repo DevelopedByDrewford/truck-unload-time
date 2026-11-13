@@ -1,70 +1,63 @@
-import { useState, useEffect } from 'react'
-import heroImg from './assets/logo512.png'
-import Wheel from './components/Wheel'
-import { calcGoal } from './utils/unloadMath'
+import { useCallback, useEffect, useState } from 'react'
+import { FaBars } from 'react-icons/fa'
+import SideMenu from './components/SideMenu'
+import UnloadTime from './pages/UnloadTime'
+import Productivity from './pages/Productivity'
 import './App.css'
 
-const HOURS = Array.from({ length: 24 }, (_, i) => String(i).padStart(2, '0'))
-const MINUTES = Array.from({ length: 60 }, (_, i) => String(i).padStart(2, '0'))
-const BOX_COUNTS = Array.from({ length: 300 }, (_, i) => i + 1)
-
-function currentHHMM() {
-  const now = new Date()
-  return `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`
+// Hash routes: "#/" (truck calculator) and "#/productivity/<category>".
+function currentRoute() {
+  const hash = window.location.hash
+  return hash.startsWith('#/') ? hash : '#/'
 }
 
 function App() {
-  const [defaultHour, defaultMinute] = currentHHMM().split(':')
-  const [hour, setHour] = useState(defaultHour)
-  const [minute, setMinute] = useState(defaultMinute)
-  const [boxes, setBoxes] = useState(180)
-  const [rate] = useStoredState('rate', 2.5)
+  const [route, setRoute] = useState(currentRoute)
+  const [menuOpen, setMenuOpen] = useState(false)
+  const closeMenu = useCallback(() => setMenuOpen(false), [])
 
-  const start = `${hour}:${minute}`
-  const result = calcGoal(start, Number(boxes), rate)
+  useEffect(() => {
+    const onHash = () => {
+      setRoute(currentRoute())
+      window.scrollTo(0, 0)
+    }
+    window.addEventListener('hashchange', onHash)
+    return () => window.removeEventListener('hashchange', onHash)
+  }, [])
 
-  function useStoredState(key, initial) {
-    const [val, setVal] = useState(() => {
-      const saved = localStorage.getItem(key)
-      return saved !== null ? JSON.parse(saved) : initial
-    })
-    useEffect(() => localStorage.setItem(key, JSON.stringify(val)), [key, val])
-    return [val, setVal]
-  }
+  const productivityMatch = route.match(/^#\/productivity\/(\w+)/)
+  const page = productivityMatch ? productivityMatch[1] : 'unload'
+
+  // Per-page color theme (see App.css); also tint the mobile browser bar to match.
+  useEffect(() => {
+    const root = document.documentElement
+    root.dataset.page = page
+    const bg = getComputedStyle(root).getPropertyValue('--bg').trim()
+    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', bg)
+  }, [page])
 
   return (
     <>
-      <img src={heroImg} alt="" className="hero" />
-      <h1>Unload Finish Time</h1>
+      <header className="top-bar">
+        <button
+          className="icon-btn"
+          onClick={() => setMenuOpen(true)}
+          aria-label="Open menu"
+          aria-expanded={menuOpen}
+          aria-controls="side-menu"
+        >
+          <FaBars aria-hidden />
+        </button>
+        <span className="top-bar-title">Truck Tools</span>
+      </header>
 
-      <div className="pickers">
-        <div className="picker-group">
-          <h2>Start Time</h2>
-          <div className="picker-row">
-            <Wheel items={HOURS} value={hour} onChange={setHour} />
-            <span className="wheel-sep">:</span>
-            <Wheel items={MINUTES} value={minute} onChange={setMinute} />
-          </div>
-        </div>
+      <SideMenu open={menuOpen} onClose={closeMenu} route={route} />
 
-        <div className="picker-group">
-          <h2>Boxes</h2>
-          <div className="picker-row">
-            <Wheel items={BOX_COUNTS} value={boxes} onChange={setBoxes} />
-          </div>
-        </div>
-      </div>
-
-      <div className="result">
-        {result ? (
-          <>
-            <h2>Done by {result.goal}</h2>
-            <p>{Math.round(result.duration)} min</p>
-          </>
-        ) : (
-          <p>Pick a start time and box count</p>
-        )}
-      </div>
+      <main>
+        {productivityMatch
+          ? <Productivity categoryId={productivityMatch[1]} />
+          : <UnloadTime />}
+      </main>
     </>
   )
 }

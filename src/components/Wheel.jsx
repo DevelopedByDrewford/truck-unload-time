@@ -1,6 +1,6 @@
 import { useRef, useLayoutEffect } from 'react'
 
-function Wheel({ items, value, onChange, itemHeight = 40 }) {
+function Wheel({ items, value, onChange, itemHeight = 40, format = it => it }) {
   const ref = useRef(null);
   const timer = useRef();
 
@@ -20,7 +20,7 @@ function Wheel({ items, value, onChange, itemHeight = 40 }) {
     <div ref={ref} onScroll={handleScroll} className="wheel" style={{ height: itemHeight * 5 }}>
       <div style={{ height: itemHeight * 2 }} />
       {items.map(it => (
-        <div key={it} className="wheel-item" style={{ height: itemHeight }}>{it}</div>
+        <div key={it} className="wheel-item" style={{ height: itemHeight }}>{format(it)}</div>
       ))}
       <div style={{ height: itemHeight * 2 }} />
     </div>
