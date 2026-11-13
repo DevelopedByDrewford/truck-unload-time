@@ -60,6 +60,7 @@ function Pod({ podId }) {
   const setPeople = fn => update({ people: fn(people) })
   const breakCount = breaks.slice(0, people).filter(Boolean).length
   const hours = podHours(Number(quantity), unit.rate, people, breakCount)
+  const pods = pod.peoplePerPod ? people / pod.peoplePerPod : null
 
   const setBreak = (i, val) => update({ breaks: breaks.map((x, j) => (j === i ? val : x)) })
 
@@ -126,6 +127,7 @@ function Pod({ podId }) {
       <div className="result">
         <h2>{(Math.round(hours * 100) / 100).toFixed(2)} hours</h2>
         <p>{formatDuration(Math.round(hours * 60))}</p>
+        {pods !== null && <p className="pods">{pods} {pods === 1 ? 'pod' : 'pods'}</p>}
       </div>
     </>
   )
