@@ -2,14 +2,21 @@ import { useCallback, useEffect, useState } from 'react'
 import { FaBars } from 'react-icons/fa'
 import SideMenu from './components/SideMenu'
 import UnloadTime from './pages/UnloadTime'
-import Productivity from './pages/Productivity'
 import Pod from './pages/Pod'
 import Freight from './pages/Freight'
 import './App.css'
 
-// Hash routes: "#/" (truck calculator), "#/productivity/<category>" and "#/pod/<type>".
+// Hash routes: "#/" (truck calculator), "#/productivity/freight" and "#/pod/<type>".
+// Apparel/Shoes productivity pages are off the site for now (pages/Productivity.jsx is kept),
+// so any old "#/productivity/..." link is redirected to Freight.
+const FREIGHT_ROUTE = '#/productivity/freight'
+
 function currentRoute() {
   const hash = window.location.hash
+  if (hash.startsWith('#/productivity/') && hash !== FREIGHT_ROUTE) {
+    window.history.replaceState(null, '', FREIGHT_ROUTE)
+    return FREIGHT_ROUTE
+  }
   return hash.startsWith('#/') ? hash : '#/'
 }
 
@@ -27,9 +34,9 @@ function App() {
     return () => window.removeEventListener('hashchange', onHash)
   }, [])
 
-  const productivityMatch = route.match(/^#\/productivity\/(\w+)/)
+  const isFreight = route === FREIGHT_ROUTE
   const podMatch = route.match(/^#\/pod\/(\w+)/)
-  const page = productivityMatch ? productivityMatch[1] : podMatch ? `pod-${podMatch[1]}` : 'unload'
+  const page = isFreight ? 'freight' : podMatch ? `pod-${podMatch[1]}` : 'unload'
 
   // Per-page color theme (see App.css); also tint the mobile browser bar to match.
   useEffect(() => {
@@ -57,8 +64,7 @@ function App() {
       <SideMenu open={menuOpen} onClose={closeMenu} route={route} />
 
       <main>
-        {productivityMatch?.[1] === 'freight' ? <Freight />
-          : productivityMatch ? <Productivity categoryId={productivityMatch[1]} />
+        {isFreight ? <Freight />
           : podMatch ? <Pod podId={podMatch[1]} />
           : <UnloadTime />}
       </main>

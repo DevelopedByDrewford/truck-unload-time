@@ -1,24 +1,12 @@
 import { useState } from 'react'
 import { FaCoffee, FaUtensils } from 'react-icons/fa'
-import { MdCheckBox, MdCheckBoxOutlineBlank } from 'react-icons/md'
+import IconCheckbox from '../components/IconCheckbox'
 import TimePicker from '../components/TimePicker'
 import { currentHHMM } from '../utils/clock'
 import {
   CATEGORIES, BREAK_MINUTES, LUNCH_MINUTES,
   shiftMinutes, calcGoal, formatDuration,
 } from '../utils/productivityMath'
-
-function IconCheckbox({ checked, onChange, Icon, label }) {
-  const Box = checked ? MdCheckBox : MdCheckBoxOutlineBlank
-  return (
-    <label className={`icon-check${checked ? ' checked' : ''}`}>
-      <input type="checkbox" checked={checked} onChange={e => onChange(e.target.checked)} />
-      <Box className="box" aria-hidden />
-      <Icon aria-hidden />
-      <span>{label}</span>
-    </label>
-  )
-}
 
 // Category comes from the menu/route; shift times are kept when switching categories.
 function Productivity({ categoryId }) {

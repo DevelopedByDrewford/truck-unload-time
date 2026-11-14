@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { FaTimes, FaTruck } from 'react-icons/fa'
-import { CATEGORIES } from '../utils/productivityMath'
+import { CATEGORIES } from '../utils/productivityMath' // only Freight is on the site for now
 import { POD_TYPES } from '../utils/podMath'
 
 function MenuLink({ href, label, Icon, route, onClose, page }) {
@@ -49,7 +49,7 @@ function SideMenu({ open, onClose, route }) {
           <MenuLink href="#/" label="Truck Calculator" Icon={FaTruck} route={route} onClose={onClose} />
 
           <h3 className="menu-section">Productivity</h3>
-          {CATEGORIES.map(({ id, title, Icon }) => (
+          {CATEGORIES.filter(c => c.id === 'freight').map(({ id, title, Icon }) => (
             <MenuLink key={id} href={`#/productivity/${id}`} label={title} Icon={Icon} route={route} onClose={onClose} page={id} />
           ))}
 
