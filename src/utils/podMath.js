@@ -3,20 +3,21 @@ import { PiCoatHangerBold } from 'react-icons/pi'
 import { GiConverseShoe } from 'react-icons/gi'
 
 // Rates are per person per hour, for each unit the page can toggle between.
+// The first unit is the default and shows on the left of the toggle.
 export const POD_TYPES = [
   {
     id: 'apparel', title: 'Apparel', Icon: PiCoatHangerBold,
     peoplePerPod: 2, // shows a pod count in the result
     units: [
-      { id: 'items', label: 'Items', rate: 200 },
       { id: 'boxes', label: 'Boxes', rate: 2 },
+      { id: 'items', label: 'Items', rate: 200 },
     ],
   },
   {
     id: 'shoes', title: 'Shoes', Icon: GiConverseShoe,
     units: [
-      { id: 'pairs', label: 'Pairs', rate: 96 },
       { id: 'boxes', label: 'Boxes', rate: 8 },
+      { id: 'pairs', label: 'Pairs', rate: 96 },
     ],
   },
 ]
