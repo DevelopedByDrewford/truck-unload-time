@@ -3,6 +3,7 @@ import { FaCoffee, FaUtensils } from 'react-icons/fa'
 import TimePicker from '../components/TimePicker'
 import IconCheckbox from '../components/IconCheckbox'
 import { currentHHMM } from '../utils/clock'
+import { useI18n } from '../i18n'
 import { CATEGORIES, BREAK_MINUTES, LUNCH_MINUTES, shiftMinutes } from '../utils/productivityMath'
 
 const freight = CATEGORIES.find(c => c.id === 'freight')
@@ -19,6 +20,7 @@ function Freight() {
   const [boxes, setBoxes] = useState('')
   const [breakTaken, setBreakTaken] = useState(false)
   const [lunchTaken, setLunchTaken] = useState(false)
+  const { t } = useI18n()
 
   const minutes = shiftMinutes(`${startHour}:${startMinute}`, `${endHour}:${endMinute}`, { breakTaken, lunchTaken })
   const hours = minutes / 60
@@ -28,17 +30,17 @@ function Freight() {
   return (
     <>
       <freight.Icon className="hero-icon" aria-hidden />
-      <h1>{freight.title}</h1>
-      <p className="rate">cartons per hour</p>
+      <h1>{t('cat.freight')}</h1>
+      <p className="rate">{t('freight.subtitle')}</p>
 
       <div className="pickers">
-        <TimePicker title="Start Time" hour={startHour} minute={startMinute} setHour={setStartHour} setMinute={setStartMinute} />
-        <TimePicker title="End Time" hour={endHour} minute={endMinute} setHour={setEndHour} setMinute={setEndMinute} />
+        <TimePicker title={t('startTime')} hour={startHour} minute={startMinute} setHour={setStartHour} setMinute={setStartMinute} />
+        <TimePicker title={t('endTime')} hour={endHour} minute={endMinute} setHour={setEndHour} setMinute={setEndMinute} />
       </div>
 
       <div className="pod-form">
         <label className="field">
-          <h2>Boxes</h2>
+          <h2>{t('boxes')}</h2>
           <input
             type="number"
             inputMode="numeric"
@@ -51,25 +53,25 @@ function Freight() {
       </div>
 
       <div className="checks">
-        <IconCheckbox checked={breakTaken} onChange={setBreakTaken} Icon={FaCoffee} label={`Break (−${BREAK_MINUTES} min)`} />
-        <IconCheckbox checked={lunchTaken} onChange={setLunchTaken} Icon={FaUtensils} label={`Lunch (−${LUNCH_MINUTES} min)`} />
+        <IconCheckbox checked={breakTaken} onChange={setBreakTaken} Icon={FaCoffee} label={t('breakLabel', { min: BREAK_MINUTES })} />
+        <IconCheckbox checked={lunchTaken} onChange={setLunchTaken} Icon={FaUtensils} label={t('lunchLabel', { min: LUNCH_MINUTES })} />
       </div>
 
       <div className="result">
-        <p className="result-label">Actual CPH</p>
+        <p className="result-label">{t('freight.actual')}</p>
         <h2 className="result-big">{cph === null ? '—' : round2(cph)}</h2>
-        <p>Total time: {round2(hours)} hours</p>
+        <p>{t('freight.totalTime', { hours: round2(hours) })}</p>
       </div>
 
       <ul className="expectations">
-        {EXPECTATIONS.map(({ id, title, cph: rate, Icon }) => (
+        {EXPECTATIONS.map(({ id, cph: rate, Icon }) => (
           <li key={id} data-page={id}>
             <Icon className="expect-icon" aria-hidden />
             <span className="expect-text">
-              <span className="expect-title">{title}</span>
+              <span className="expect-title">{t(`cat.${id}`)}</span>
               <span className="expect-rate">{rate} cph</span>
             </span>
-            <span className="expect-count">{round2(hours * rate)} <small>boxes</small></span>
+            <span className="expect-count">{round2(hours * rate)} <small>{t('boxesLower')}</small></span>
           </li>
         ))}
       </ul>

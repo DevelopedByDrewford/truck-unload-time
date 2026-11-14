@@ -5,6 +5,7 @@ import {
   POD_TYPES, DEFAULT_PEOPLE, MAX_PEOPLE, POD_BREAK_MINUTES, podHours,
 } from '../utils/podMath'
 import { formatDuration } from '../utils/productivityMath'
+import { useI18n } from '../i18n'
 
 function BreakCheckbox({ checked, onChange, label }) {
   const Box = checked ? MdCheckBox : MdCheckBoxOutlineBlank
@@ -43,6 +44,7 @@ function loadAll() {
 function Pod({ podId }) {
   const pod = POD_TYPES.find(p => p.id === podId) ?? POD_TYPES[0]
   const [all, setAll] = useState(loadAll)
+  const { t } = useI18n()
 
   useEffect(() => {
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(all)) } catch { /* storage unavailable */ }
@@ -67,11 +69,11 @@ function Pod({ podId }) {
   return (
     <>
       <pod.Icon className="hero-icon" aria-hidden />
-      <h1>{pod.title} Pod</h1>
-      <p className="rate">{unit.rate} {unit.label.toLowerCase()} per person per hour</p>
+      <h1>{t('pod.title', { name: t(`cat.${pod.id}`) })}</h1>
+      <p className="rate">{t('pod.rate', { rate: unit.rate, unit: t(`unit.${unit.id}`).toLowerCase() })}</p>
 
       <div className="pod-form">
-        <div className="segmented" role="radiogroup" aria-label="Count by">
+        <div className="segmented" role="radiogroup" aria-label={t('pod.countBy')}>
           {pod.units.map(u => (
             <button
               key={u.id}
@@ -80,13 +82,13 @@ function Pod({ podId }) {
               className={u.id === unit.id ? 'active' : ''}
               onClick={() => update({ unitId: u.id })}
             >
-              {u.label}
+              {t(`unit.${u.id}`)}
             </button>
           ))}
         </div>
 
         <label className="field">
-          <h2>{unit.label}</h2>
+          <h2>{t(`unit.${unit.id}`)}</h2>
           <input
             type="number"
             inputMode="numeric"
@@ -98,15 +100,15 @@ function Pod({ podId }) {
         </label>
 
         <div className="field">
-          <h2>People</h2>
+          <h2>{t('pod.people')}</h2>
           <div className="stepper">
             <button className="icon-btn" onClick={() => setPeople(p => Math.max(1, p - 1))}
-              disabled={people <= 1} aria-label="Fewer people">
+              disabled={people <= 1} aria-label={t('pod.fewer')}>
               <FaMinus aria-hidden />
             </button>
             <output aria-live="polite">{people}</output>
             <button className="icon-btn" onClick={() => setPeople(p => Math.min(MAX_PEOPLE, p + 1))}
-              disabled={people >= MAX_PEOPLE} aria-label="More people">
+              disabled={people >= MAX_PEOPLE} aria-label={t('pod.more')}>
               <FaPlus aria-hidden />
             </button>
           </div>
@@ -119,15 +121,15 @@ function Pod({ podId }) {
             key={i}
             checked={breaks[i]}
             onChange={val => setBreak(i, val)}
-            label={`Person ${i + 1} break (−${POD_BREAK_MINUTES} min)`}
+            label={t('pod.personBreak', { n: i + 1, min: POD_BREAK_MINUTES })}
           />
         ))}
       </div>
 
       <div className="result">
-        <h2>{(Math.round(hours * 100) / 100).toFixed(2)} hours</h2>
+        <h2>{t('pod.hours', { hours: (Math.round(hours * 100) / 100).toFixed(2) })}</h2>
         <p>{formatDuration(Math.round(hours * 60))}</p>
-        {pods !== null && <p className="pods">{pods} {pods === 1 ? 'pod' : 'pods'}</p>}
+        {pods !== null && <p className="pods">{pods} {t(pods === 1 ? 'pod.pod' : 'pod.pods')}</p>}
       </div>
     </>
   )

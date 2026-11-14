@@ -153,3 +153,13 @@
 .expect-rate { font-family: var(--mono); font-size: 13px; }
 .expect-count { font-family: var(--mono); font-size: 22px; color: var(--accent); white-space: nowrap; }
 .expect-count small { font-size: 13px; color: var(--text); }
+
+/* Language toggle (top bar, right side) */
+.top-bar-title { flex: 1; min-width: 0; text-align: left; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lang-toggle { display: inline-flex; flex-shrink: 0; padding: 3px; gap: 2px; border: 1px solid var(--border); border-radius: 999px; }
+.lang-toggle button { min-width: 40px; min-height: 32px; padding: 0 8px; font: inherit; font-size: 13px; font-weight: 600;
+  letter-spacing: 0.04em; color: var(--text); background: transparent; border: 0; border-radius: 999px; cursor: pointer; }
+.lang-toggle button.active { color: var(--accent); background: var(--accent-bg); box-shadow: inset 0 0 0 1px var(--accent-border); }
+.lang-toggle button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.top-bar-title { font-size: 15px; }
+h1 { padding-inline: 16px; overflow-wrap: break-word; line-height: 1.1; }

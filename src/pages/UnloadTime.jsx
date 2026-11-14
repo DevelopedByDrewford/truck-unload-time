@@ -3,6 +3,7 @@ import heroImg from '../assets/logo512.png'
 import Wheel from '../components/Wheel'
 import { formatHour12 } from '../utils/time'
 import { calcGoal } from '../utils/unloadMath'
+import { useI18n } from '../i18n'
 
 const HOURS = Array.from({ length: 24 }, (_, i) => String(i).padStart(2, '0'))
 const MINUTES = Array.from({ length: 60 }, (_, i) => String(i).padStart(2, '0'))
@@ -28,6 +29,7 @@ function UnloadTime() {
   const [minute, setMinute] = useState(defaultMinute)
   const [boxes, setBoxes] = useState(180)
   const [rate] = useStoredState('rate', 2.5)
+  const { t } = useI18n()
 
   const start = `${hour}:${minute}`
   const result = calcGoal(start, Number(boxes), rate)
@@ -35,11 +37,11 @@ function UnloadTime() {
   return (
     <>
       <img src={heroImg} alt="" className="hero" />
-      <h1>Unload Finish Time</h1>
+      <h1>{t('unload.title')}</h1>
 
       <div className="pickers">
         <div className="picker-group">
-          <h2>Start Time</h2>
+          <h2>{t('startTime')}</h2>
           <div className="picker-row">
             <Wheel items={HOURS} value={hour} onChange={setHour} format={formatHour12} />
             <span className="wheel-sep">:</span>
@@ -48,7 +50,7 @@ function UnloadTime() {
         </div>
 
         <div className="picker-group">
-          <h2>Boxes</h2>
+          <h2>{t('boxes')}</h2>
           <div className="picker-row">
             <Wheel items={BOX_COUNTS} value={boxes} onChange={setBoxes} />
           </div>
@@ -58,11 +60,11 @@ function UnloadTime() {
       <div className="result">
         {result ? (
           <>
-            <h2>Done by {result.goal}</h2>
+            <h2>{t('unload.doneBy', { time: result.goal })}</h2>
             <p>{Math.round(result.duration)} min</p>
           </>
         ) : (
-          <p>Pick a start time and box count</p>
+          <p>{t('unload.pick')}</p>
         )}
       </div>
     </>

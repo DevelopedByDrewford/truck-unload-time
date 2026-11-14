@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { FaBars } from 'react-icons/fa'
 import SideMenu from './components/SideMenu'
+import { useI18n, LANGUAGES } from './i18n'
 import UnloadTime from './pages/UnloadTime'
 import Pod from './pages/Pod'
 import Freight from './pages/Freight'
@@ -23,6 +24,7 @@ function currentRoute() {
 function App() {
   const [route, setRoute] = useState(currentRoute)
   const [menuOpen, setMenuOpen] = useState(false)
+  const { lang, setLang, t } = useI18n()
   const closeMenu = useCallback(() => setMenuOpen(false), [])
 
   useEffect(() => {
@@ -52,13 +54,27 @@ function App() {
         <button
           className="icon-btn"
           onClick={() => setMenuOpen(true)}
-          aria-label="Open menu"
+          aria-label={t('openMenu')}
           aria-expanded={menuOpen}
           aria-controls="side-menu"
         >
           <FaBars aria-hidden />
         </button>
-        <span className="top-bar-title">Truck Tools</span>
+        <span className="top-bar-title">{t('appName')}</span>
+        <div className="lang-toggle" role="radiogroup" aria-label={t('language')}>
+          {LANGUAGES.map(code => (
+            <button
+              key={code}
+              role="radio"
+              aria-checked={code === lang}
+              className={code === lang ? 'active' : ''}
+              onClick={() => setLang(code)}
+              lang={code}
+            >
+              {code.toUpperCase()}
+            </button>
+          ))}
+        </div>
       </header>
 
       <SideMenu open={menuOpen} onClose={closeMenu} route={route} />

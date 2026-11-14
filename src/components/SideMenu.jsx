@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 import { FaTimes, FaTruck } from 'react-icons/fa'
 import { CATEGORIES } from '../utils/productivityMath' // only Freight is on the site for now
 import { POD_TYPES } from '../utils/podMath'
+import { useI18n } from '../i18n'
 
 function MenuLink({ href, label, Icon, route, onClose, page }) {
   const active = route === href
@@ -15,6 +16,7 @@ function MenuLink({ href, label, Icon, route, onClose, page }) {
 
 function SideMenu({ open, onClose, route }) {
   const closeRef = useRef(null)
+  const { t } = useI18n()
 
   useEffect(() => {
     if (!open) return
@@ -34,28 +36,28 @@ function SideMenu({ open, onClose, route }) {
       <aside
         id="side-menu"
         className={`side-menu${open ? ' open' : ''}`}
-        aria-label="Main menu"
+        aria-label={t('mainMenu')}
         aria-hidden={!open}
         inert={!open}
       >
         <div className="menu-head">
-          <span>Menu</span>
-          <button ref={closeRef} className="icon-btn" onClick={onClose} aria-label="Close menu">
+          <span>{t('menu')}</span>
+          <button ref={closeRef} className="icon-btn" onClick={onClose} aria-label={t('closeMenu')}>
             <FaTimes aria-hidden />
           </button>
         </div>
 
         <nav>
-          <MenuLink href="#/" label="Truck Calculator" Icon={FaTruck} route={route} onClose={onClose} />
+          <MenuLink href="#/" label={t('nav.truck')} Icon={FaTruck} route={route} onClose={onClose} />
 
-          <h3 className="menu-section">Productivity</h3>
-          {CATEGORIES.filter(c => c.id === 'freight').map(({ id, title, Icon }) => (
-            <MenuLink key={id} href={`#/productivity/${id}`} label={title} Icon={Icon} route={route} onClose={onClose} page={id} />
+          <h3 className="menu-section">{t('nav.productivity')}</h3>
+          {CATEGORIES.filter(c => c.id === 'freight').map(({ id, Icon }) => (
+            <MenuLink key={id} href={`#/productivity/${id}`} label={t(`cat.${id}`)} Icon={Icon} route={route} onClose={onClose} page={id} />
           ))}
 
-          <h3 className="menu-section">Pod Calculator</h3>
-          {POD_TYPES.map(({ id, title, Icon }) => (
-            <MenuLink key={id} href={`#/pod/${id}`} label={title} Icon={Icon} route={route} onClose={onClose} page={`pod-${id}`} />
+          <h3 className="menu-section">{t('nav.pod')}</h3>
+          {POD_TYPES.map(({ id, Icon }) => (
+            <MenuLink key={id} href={`#/pod/${id}`} label={t(`cat.${id}`)} Icon={Icon} route={route} onClose={onClose} page={`pod-${id}`} />
           ))}
         </nav>
       </aside>
