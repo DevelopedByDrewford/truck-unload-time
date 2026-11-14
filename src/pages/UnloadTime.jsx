@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import usePersistentState from '../hooks/usePersistentState'
 import heroImg from '../assets/logo512.png'
 import NumberPicker from '../components/NumberPicker'
 import TimePicker from '../components/TimePicker'
@@ -12,21 +12,13 @@ function currentHHMM() {
   return `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`
 }
 
-function useStoredState(key, initial) {
-  const [val, setVal] = useState(() => {
-    const saved = localStorage.getItem(key)
-    return saved !== null ? JSON.parse(saved) : initial
-  })
-  useEffect(() => localStorage.setItem(key, JSON.stringify(val)), [key, val])
-  return [val, setVal]
-}
-
 function UnloadTime() {
   const [defaultHour, defaultMinute] = currentHHMM().split(':')
-  const [hour, setHour] = useState(defaultHour)
-  const [minute, setMinute] = useState(defaultMinute)
-  const [boxes, setBoxes] = useState(180)
-  const [rate] = useStoredState('rate', 2.5)
+  // Saved, so the inputs are still here when you come back to this page.
+  const [hour, setHour] = usePersistentState('unload.hour', defaultHour)
+  const [minute, setMinute] = usePersistentState('unload.minute', defaultMinute)
+  const [boxes, setBoxes] = usePersistentState('unload.boxes', 180)
+  const [rate] = usePersistentState('rate', 2.5)
   const { t } = useI18n()
 
   const start = `${hour}:${minute}`
@@ -47,7 +39,7 @@ function UnloadTime() {
         {result ? (
           <>
             <h2>{t('unload.doneBy', { time: result.goal })}</h2>
-            <p>{Math.round(result.duration)} min</p>
+            <p>{t('unload.minutes', { n: Math.round(result.duration) })}</p>
           </>
         ) : (
           <p>{t('unload.pick')}</p>

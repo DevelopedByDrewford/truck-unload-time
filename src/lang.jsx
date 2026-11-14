@@ -1,7 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useEffect, useState } from 'react'
 
-// UI text in English and Spanish. "CPH" and "Pod" are intentionally left untranslated.
+// UI text in English, Spanish and Urdu. "CPH" and "Pod" are intentionally left untranslated.
 // Use {name} placeholders for values filled in by t(key, { name: value }).
 const STRINGS = {
   en: {
@@ -36,6 +36,7 @@ const STRINGS = {
     'unload.title': 'Unload Finish Time',
     'unload.doneBy': 'Done by {time}',
     'unload.pick': 'Pick a start time and box count',
+    'unload.minutes': '{n} min',
 
     'freight.subtitle': 'cartons per hour',
     'freight.actual': 'Actual CPH',
@@ -104,17 +105,76 @@ const STRINGS = {
     'pod.pod': 'pod',
     'pod.pods': 'pods',
   },
+  // Urdu (right-to-left). Please have a native speaker review these.
+  ur: {
+    appName: 'ٹرک ٹولز',
+    openMenu: 'مینو کھولیں',
+    closeMenu: 'مینو بند کریں',
+    mainMenu: 'مرکزی مینو',
+    menu: 'مینو',
+    language: 'زبان',
+    typeTime: '{title} ٹائپ کریں',
+    typeValue: '{title} ٹائپ کریں ({min}–{max})',
+
+    'nav.truck': 'ٹرک کیلکولیٹر',
+    'nav.productivity': 'پیداواری صلاحیت',
+    'nav.pod': 'Pod کیلکولیٹر',
+
+    'cat.apparel': 'ملبوسات',
+    'cat.shoes': 'جوتے',
+    'cat.freight': 'فریٹ',
+
+    'unit.boxes': 'ڈبے',
+    'unit.items': 'اشیاء',
+    'unit.pairs': 'جوڑے',
+
+    startTime: 'شروع کا وقت',
+    endTime: 'ختم کا وقت',
+    boxes: 'ڈبے',
+    boxesLower: 'ڈبے',
+    breakLabel: 'وقفہ (−{min} منٹ)',
+    lunchLabel: 'لنچ (−{min} منٹ)',
+
+    'unload.title': 'ان لوڈ ختم ہونے کا وقت',
+    'unload.doneBy': '{time} تک مکمل',
+    'unload.pick': 'شروع کا وقت اور ڈبوں کی تعداد منتخب کریں',
+    'unload.minutes': '{n} منٹ',
+
+    'freight.subtitle': 'ڈبے فی گھنٹہ',
+    'freight.actual': 'اصل CPH',
+    'freight.expectation': 'کم از کم توقعات',
+    'freight.totalTime': 'کل وقت: {hours} گھنٹے',
+    'freight.pass': 'CPH پورا ہے',
+    'freight.fail': 'CPH سے کم',
+
+    'pod.title': '{name} Pod',
+    'pod.countBy': 'گنتی بذریعہ',
+    'pod.people': 'افراد',
+    'pod.fewer': 'کم افراد',
+    'pod.more': 'زیادہ افراد',
+    'pod.personBreak': 'فرد {n} کا وقفہ (−{min} منٹ)',
+    'pod.hours': '{hours} گھنٹے',
+    'pod.pod': 'pod',
+    'pod.pods': 'pods',
+  },
 }
 
-export const LANGUAGES = ['en', 'es']
+// Toggle order and labels. Urdu shows its own name so Urdu readers can find it.
+export const LANGUAGES = [
+  { code: 'en', label: 'EN' },
+  { code: 'es', label: 'ES' },
+  { code: 'ur', label: 'اردو', dir: 'rtl' },
+]
+const CODES = LANGUAGES.map(l => l.code)
 const STORAGE_KEY = 'lang'
 
 function initialLang() {
   try {
     const saved = localStorage.getItem(STORAGE_KEY)
-    if (LANGUAGES.includes(saved)) return saved
+    if (CODES.includes(saved)) return saved
   } catch { /* storage unavailable */ }
-  return navigator.language?.toLowerCase().startsWith('es') ? 'es' : 'en'
+  const device = navigator.language?.toLowerCase().slice(0, 2)
+  return CODES.includes(device) ? device : 'en'
 }
 
 const I18nContext = createContext(null)
@@ -124,12 +184,20 @@ export function LanguageProvider({ children }) {
 
   useEffect(() => {
     document.documentElement.lang = lang
+    // Urdu reads right-to-left; the whole layout mirrors (see App.css for the parts that stay LTR).
+    document.documentElement.dir = LANGUAGES.find(l => l.code === lang)?.dir ?? 'ltr'
     try { localStorage.setItem(STORAGE_KEY, lang) } catch { /* storage unavailable */ }
   }, [lang])
 
+  const rtl = LANGUAGES.find(l => l.code === lang)?.dir === 'rtl'
+
   const t = (key, vars = {}) => {
     const text = STRINGS[lang][key] ?? STRINGS.en[key] ?? key
-    return text.replace(/\{(\w+)\}/g, (_, name) => vars[name] ?? '')
+    return text.replace(/\{(\w+)\}/g, (_, name) => {
+      const val = vars[name] ?? ''
+      // In right-to-left text, isolate inserted values so "3:20 PM" doesn't render as "PM 3:20".
+      return rtl && val !== '' ? `\u2068${val}\u2069` : val
+    })
   }
 
   return <I18nContext.Provider value={{ lang, setLang, t }}>{children}</I18nContext.Provider>

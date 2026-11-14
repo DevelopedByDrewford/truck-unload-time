@@ -62,7 +62,7 @@ function App() {
         </button>
         <span className="top-bar-title">{t('appName')}</span>
         <div className="lang-toggle" role="radiogroup" aria-label={t('language')}>
-          {LANGUAGES.map(code => (
+          {LANGUAGES.map(({ code, label }) => (
             <button
               key={code}
               role="radio"
@@ -71,7 +71,7 @@ function App() {
               onClick={() => setLang(code)}
               lang={code}
             >
-              {code.toUpperCase()}
+              {label}
             </button>
           ))}
         </div>

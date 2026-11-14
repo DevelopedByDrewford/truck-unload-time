@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import usePersistentState from '../hooks/usePersistentState'
 import { FaCheckCircle, FaCoffee, FaTimesCircle, FaUtensils } from 'react-icons/fa'
 import TimePicker from '../components/TimePicker'
 import IconCheckbox from '../components/IconCheckbox'
@@ -13,13 +13,14 @@ const EXPECTATIONS = ['apparel', 'shoes'].map(id => CATEGORIES.find(c => c.id ==
 // Freight: work out cartons per hour from start time, end time and boxes done.
 function Freight() {
   const [nowH, nowM] = currentHHMM()
-  const [startHour, setStartHour] = useState(nowH)
-  const [startMinute, setStartMinute] = useState(nowM)
-  const [endHour, setEndHour] = useState(nowH)
-  const [endMinute, setEndMinute] = useState(nowM)
-  const [boxes, setBoxes] = useState('')
-  const [breakTaken, setBreakTaken] = useState(false)
-  const [lunchTaken, setLunchTaken] = useState(false)
+  // Saved, so the inputs are still here when you come back to Freight.
+  const [startHour, setStartHour] = usePersistentState('freight.startHour', nowH)
+  const [startMinute, setStartMinute] = usePersistentState('freight.startMinute', nowM)
+  const [endHour, setEndHour] = usePersistentState('freight.endHour', nowH)
+  const [endMinute, setEndMinute] = usePersistentState('freight.endMinute', nowM)
+  const [boxes, setBoxes] = usePersistentState('freight.boxes', '')
+  const [breakTaken, setBreakTaken] = usePersistentState('freight.break', false)
+  const [lunchTaken, setLunchTaken] = usePersistentState('freight.lunch', false)
   const { t } = useI18n()
 
   const minutes = shiftMinutes(`${startHour}:${startMinute}`, `${endHour}:${endMinute}`, { breakTaken, lunchTaken })

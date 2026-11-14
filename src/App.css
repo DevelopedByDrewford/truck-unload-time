@@ -3,9 +3,9 @@
 .header-box__contents--icon { flex-shrink: 0; display: flex; }
 .header-box .hero, .header-box .hero-icon { margin: 0; }
 .header-box .hero { width: 96px; border-radius: 20px; }
-.header-box__contents--titles { min-width: 0; text-align: left; }
+.header-box__contents--titles { min-width: 0; text-align: start; }
 .header-box__contents--titles h1 { margin: 0; padding-inline: 0; }
-.header-box__contents--titles p { text-align: left; margin: 4px 0 0; }
+.header-box__contents--titles p { text-align: start; margin: 4px 0 0; }
 
 /* Wheel  */
 .wheel { overflow-y: scroll; scroll-snap-type: y mandatory; scrollbar-width: none;
@@ -63,10 +63,10 @@
   opacity: 0; pointer-events: none; transition: opacity 0.25s ease; }
 .menu-backdrop.open { opacity: 1; pointer-events: auto; }
 
-.side-menu { position: fixed; top: 0; bottom: 0; left: 0; z-index: 30;
-  width: min(80vw, 300px); display: flex; flex-direction: column; text-align: left;
+.side-menu { position: fixed; top: 0; bottom: 0; inset-inline-start: 0; z-index: 30;
+  width: min(80vw, 300px); display: flex; flex-direction: column; text-align: start;
   padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom);
-  background: var(--bg); border-right: 1px solid var(--border); box-shadow: var(--shadow);
+  background: var(--bg); border-inline-end: 1px solid var(--border); box-shadow: var(--shadow);
   transform: translateX(-100%); visibility: hidden;
   transition: transform 0.25s ease, visibility 0s linear 0.25s; overflow-y: auto; }
 .side-menu.open { transform: none; visibility: visible; transition: transform 0.25s ease; }
@@ -91,7 +91,7 @@
 }
 
 /* 12-hour clock AM/PM label inside the hour wheel */
-.wheel-item .ampm { margin-left: 4px; font-size: 0.65em; color: var(--text); }
+.wheel-item .ampm { margin-inline-start: 4px; font-size: 0.65em; color: var(--text); }
 
 /* Category icon used in place of the hero image on productivity pages */
 .hero-icon { display: block; margin: 24px auto 0; font-size: 96px; color: var(--accent); }
@@ -147,7 +147,7 @@
 .result .result-big { font-size: 44px; line-height: 1.1; font-family: var(--mono); margin-bottom: 4px; }
 .expectations { list-style: none; margin: 0 auto 40px; padding: 0 16px; width: 100%; max-width: 360px;
   box-sizing: border-box; display: flex; flex-direction: column; gap: 10px; }
-.expectations li { display: flex; align-items: center; gap: 14px; padding: 12px 16px; text-align: left;
+.expectations li { display: flex; align-items: center; gap: 14px; padding: 12px 16px; text-align: start;
   border: 1px solid var(--accent-border); background: var(--accent-bg); border-radius: 12px; }
 .expect-icon { font-size: 30px; flex-shrink: 0; color: var(--accent); }
 .expect-text { display: flex; flex-direction: column; flex: 1; line-height: 1.25; }
@@ -157,7 +157,7 @@
 .expect-count small { font-size: 13px; color: var(--text); }
 
 /* Language toggle (top bar, right side) */
-.top-bar-title { flex: 1; min-width: 0; text-align: left; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.top-bar-title { flex: 1; min-width: 0; text-align: start; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .lang-toggle { display: inline-flex; flex-shrink: 0; padding: 3px; gap: 2px; border: 1px solid var(--border); border-radius: 999px; }
 .lang-toggle button { min-width: 40px; min-height: 32px; padding: 0 8px; font: inherit; font-size: 13px; font-weight: 600;
   letter-spacing: 0.04em; color: var(--text); background: transparent; border: 0; border-radius: 999px; cursor: pointer; }
@@ -196,7 +196,7 @@ h1 { padding-inline: 16px; overflow-wrap: break-word; line-height: 1.1; }
   .expect-grade.fail { color: #f87171; }
 }
 /* Room for the pass/fail mark inside the card on narrow phones */
-.expectations li { gap: 10px; padding: 12px 12px 12px 14px; }
+.expectations li { gap: 10px; padding-block: 12px; padding-inline: 14px 12px; }
 .expect-text { min-width: 0; }
 .expect-count { display: flex; align-items: baseline; gap: 4px; }
 @media (max-width: 359px) {
@@ -210,3 +210,16 @@ h1 { padding-inline: 16px; overflow-wrap: break-word; line-height: 1.1; }
 /* Placeholder in the empty pass/fail slot: a faint dashed circle the same size as the marks */
 .expect-grade-slot:empty::before { content: ''; width: 80%; height: 80%; box-sizing: border-box;
   border: 2px dashed var(--accent-border); border-radius: 50%; opacity: 0.7; }
+
+/* ---------- Right-to-left (Urdu) ---------- */
+/* Menu slides in from the right */
+[dir="rtl"] .side-menu { transform: translateX(100%); }
+[dir="rtl"] .side-menu.open { transform: none; }
+/* Clock times and numbers always read left-to-right (hour : minute) */
+.picker-row, .time-entry-value, .result-big, .wheel-item { direction: ltr; }
+/* Urdu script needs more line height */
+:root[lang="ur"] { line-height: 1.8; }
+:root[lang="ur"] h1, :root[lang="ur"] h2 { line-height: 1.5; }
+.lang-toggle button[lang="ur"] { font-weight: 500; font-size: 14px; }
+/* Urdu reads better in the regular font than in monospace */
+:root[lang="ur"] .result p, :root[lang="ur"] .rate, :root[lang="ur"] .expect-rate { font-family: var(--sans); }
