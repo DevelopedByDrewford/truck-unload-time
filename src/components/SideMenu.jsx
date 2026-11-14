@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 import { FaTimes, FaTruck } from 'react-icons/fa'
 import { CATEGORIES } from '../utils/productivityMath' // only Freight is on the site for now
 import { POD_TYPES } from '../utils/podMath'
-import { useI18n } from '../i18n'
+import { useI18n } from '../lang'
 
 function MenuLink({ href, label, Icon, route, onClose, page }) {
   const active = route === href

@@ -2,7 +2,7 @@ import { useRef, useState } from 'react'
 import Wheel from './Wheel'
 import { formatHour12 } from '../utils/time'
 import { MAX_DIGITS, parseTyped, previewTyped } from '../utils/timeEntry'
-import { useI18n } from '../i18n'
+import { useI18n } from '../lang'
 
 const HOURS = Array.from({ length: 24 }, (_, i) => String(i).padStart(2, '0'))
 const MINUTES = Array.from({ length: 60 }, (_, i) => String(i).padStart(2, '0'))

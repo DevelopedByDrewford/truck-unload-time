@@ -42,7 +42,6 @@ const STRINGS = {
     'freight.totalTime': 'Total time: {hours} hours',
 
     'pod.title': '{name} Pod',
-    'pod.rate': '{rate} {unit} per person per hour',
     'pod.countBy': 'Count by',
     'pod.people': 'People',
     'pod.fewer': 'Fewer people',
@@ -53,7 +52,7 @@ const STRINGS = {
     'pod.pods': 'pods',
   },
   es: {
-    appName: 'Herramientas de Camión',
+    appName: 'Herramientas del Tráiler',
     openMenu: 'Abrir menú',
     closeMenu: 'Cerrar menú',
     mainMenu: 'Menú principal',
@@ -90,7 +89,6 @@ const STRINGS = {
     'freight.totalTime': 'Tiempo total: {hours} horas',
 
     'pod.title': 'Pod de {name}',
-    'pod.rate': '{rate} {unit} por persona por hora',
     'pod.countBy': 'Contar por',
     'pod.people': 'Personas',
     'pod.fewer': 'Menos personas',

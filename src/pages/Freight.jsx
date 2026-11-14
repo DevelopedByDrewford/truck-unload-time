@@ -3,7 +3,7 @@ import { FaCoffee, FaUtensils } from 'react-icons/fa'
 import TimePicker from '../components/TimePicker'
 import IconCheckbox from '../components/IconCheckbox'
 import { currentHHMM } from '../utils/clock'
-import { useI18n } from '../i18n'
+import { useI18n } from '../lang'
 import { CATEGORIES, BREAK_MINUTES, LUNCH_MINUTES, shiftMinutes } from '../utils/productivityMath'
 
 const freight = CATEGORIES.find(c => c.id === 'freight')
@@ -29,9 +29,15 @@ function Freight() {
 
   return (
     <>
-      <freight.Icon className="hero-icon" aria-hidden />
-      <h1>{t('cat.freight')}</h1>
-      <p className="rate">{t('freight.subtitle')}</p>
+      <div className='header-box'>
+        <div className='header-box__contents--icon'>
+          <freight.Icon className="hero-icon" aria-hidden />
+        </div>
+        <div className='header-box__contents--titles'>
+          <h1>{t('cat.freight')}</h1>
+          <p className="rate">{t('freight.subtitle')}</p>
+        </div>
+      </div>
 
       <div className="pickers">
         <TimePicker title={t('startTime')} hour={startHour} minute={startMinute} setHour={setStartHour} setMinute={setStartMinute} />

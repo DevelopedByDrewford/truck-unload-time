@@ -7,6 +7,7 @@ import { GiConverseShoe } from 'react-icons/gi'
 export const POD_TYPES = [
   {
     id: 'apparel', title: 'Apparel', Icon: PiCoatHangerBold,
+    rate: '2 CPH',
     peoplePerPod: 2, // shows a pod count in the result
     units: [
       { id: 'boxes', label: 'Boxes', rate: 2 },
@@ -15,6 +16,7 @@ export const POD_TYPES = [
   },
   {
     id: 'shoes', title: 'Shoes', Icon: GiConverseShoe,
+    rate: '8 CPH',
     units: [
       { id: 'boxes', label: 'Boxes', rate: 8 },
       { id: 'pairs', label: 'Pairs', rate: 96 },

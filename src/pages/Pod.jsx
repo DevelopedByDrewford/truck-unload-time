@@ -5,7 +5,7 @@ import {
   POD_TYPES, DEFAULT_PEOPLE, MAX_PEOPLE, POD_BREAK_MINUTES, podHours,
 } from '../utils/podMath'
 import { formatDuration } from '../utils/productivityMath'
-import { useI18n } from '../i18n'
+import { useI18n } from '../lang'
 
 function BreakCheckbox({ checked, onChange, label }) {
   const Box = checked ? MdCheckBox : MdCheckBoxOutlineBlank
@@ -68,10 +68,15 @@ function Pod({ podId }) {
 
   return (
     <>
-      <pod.Icon className="hero-icon" aria-hidden />
-      <h1>{t('pod.title', { name: t(`cat.${pod.id}`) })}</h1>
-      <p className="rate">{t('pod.rate', { rate: unit.rate, unit: t(`unit.${unit.id}`).toLowerCase() })}</p>
-
+      <div className='header-box'>
+        <div className='header-box__contents--icon'>
+          <pod.Icon className="hero-icon" aria-hidden />
+        </div>
+        <div className='header-box__contents--titles'>
+          <h1>{t('pod.title', { name: t(`cat.${pod.id}`) })}</h1>
+          <p className="rate">{pod.rate}</p>
+        </div>
+      </div>
       <div className="pod-form">
         <div className="segmented" role="radiogroup" aria-label={t('pod.countBy')}>
           {pod.units.map(u => (

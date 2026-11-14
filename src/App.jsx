@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { FaBars } from 'react-icons/fa'
 import SideMenu from './components/SideMenu'
-import { useI18n, LANGUAGES } from './i18n'
+import { useI18n, LANGUAGES } from './lang'
 import UnloadTime from './pages/UnloadTime'
 import Pod from './pages/Pod'
 import Freight from './pages/Freight'

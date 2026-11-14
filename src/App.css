@@ -1,3 +1,12 @@
+/* Headers: icon on the left, title + subtitle left-aligned beside it */
+.header-box { display: flex; justify-content: center; align-items: center; gap: 16px; padding: 24px 16px 0; }
+.header-box__contents--icon { flex-shrink: 0; display: flex; }
+.header-box .hero, .header-box .hero-icon { margin: 0; }
+.header-box .hero { width: 96px; border-radius: 20px; }
+.header-box__contents--titles { min-width: 0; text-align: left; }
+.header-box__contents--titles h1 { margin: 0; padding-inline: 0; }
+.header-box__contents--titles p { text-align: left; margin: 4px 0 0; }
+
 /* Wheel  */
 .wheel { overflow-y: scroll; scroll-snap-type: y mandatory; scrollbar-width: none;
   mask-image: linear-gradient(transparent, #000 35%, #000 65%, transparent); }

@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react'
 import Wheel from './Wheel'
-import { useI18n } from '../i18n'
+import { useI18n } from '../lang'
 
 // A number wheel (e.g. box count) you can scroll, or tap to type on the number keypad.
 // Works like TimePicker: the hidden input stays in the DOM so iPhone opens the keypad on tap.

@@ -3,7 +3,7 @@ import heroImg from '../assets/logo512.png'
 import NumberPicker from '../components/NumberPicker'
 import TimePicker from '../components/TimePicker'
 import { calcGoal } from '../utils/unloadMath'
-import { useI18n } from '../i18n'
+import { useI18n } from '../lang'
 
 const BOX_COUNTS = Array.from({ length: 300 }, (_, i) => i + 1)
 
