@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { FaCoffee, FaUtensils } from 'react-icons/fa'
+import { FaCheckCircle, FaCoffee, FaTimesCircle, FaUtensils } from 'react-icons/fa'
 import TimePicker from '../components/TimePicker'
 import IconCheckbox from '../components/IconCheckbox'
 import { currentHHMM } from '../utils/clock'
@@ -26,6 +26,10 @@ function Freight() {
   const hours = minutes / 60
   const cph = hours > 0 ? Number(boxes) / hours : null
   const round2 = n => (Math.round(n * 100) / 100).toFixed(2)
+  // Pass/fail only once there's a real result to judge (time worked and boxes entered).
+  // Compared at the displayed precision, so a shown 2.00 against a 2 cph goal passes.
+  const graded = cph !== null && Number(boxes) > 0
+  const passes = rate => Number(round2(cph)) >= rate
 
   return (
     <>
@@ -79,6 +83,12 @@ function Freight() {
               <span className="expect-rate">{rate} cph</span>
             </span>
             <span className="expect-count">{round2(hours * rate)} <small>{t('boxesLower')}</small></span>
+            {/* Slot is always there, so the card doesn't shift when a mark appears */}
+            <span className="expect-grade-slot">
+              {graded && (passes(rate)
+                ? <FaCheckCircle className="expect-grade pass" role="img" aria-label={t('freight.pass')} />
+                : <FaTimesCircle className="expect-grade fail" role="img" aria-label={t('freight.fail')} />)}
+            </span>
           </li>
         ))}
       </ul>

@@ -41,6 +41,8 @@ const STRINGS = {
     'freight.actual': 'Actual CPH',
     'freight.expectation': 'Minimum Expectations',
     'freight.totalTime': 'Total time: {hours} hours',
+    'freight.pass': 'Meets CPH',
+    'freight.fail': 'Below CPH',
 
     'pod.title': '{name} Pod',
     'pod.countBy': 'Count by',
@@ -89,6 +91,8 @@ const STRINGS = {
     'freight.actual': 'CPH Real',
     'freight.expectation': 'Metas Mínimas',
     'freight.totalTime': 'Tiempo total: {hours} horas',
+    'freight.pass': 'Cumple el CPH',
+    'freight.fail': 'Por debajo del CPH',
 
     'pod.title': 'Pod de {name}',
     'pod.countBy': 'Contar por',
