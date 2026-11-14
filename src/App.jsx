@@ -4,6 +4,7 @@ import SideMenu from './components/SideMenu'
 import UnloadTime from './pages/UnloadTime'
 import Productivity from './pages/Productivity'
 import Pod from './pages/Pod'
+import Freight from './pages/Freight'
 import './App.css'
 
 // Hash routes: "#/" (truck calculator), "#/productivity/<category>" and "#/pod/<type>".
@@ -56,7 +57,8 @@ function App() {
       <SideMenu open={menuOpen} onClose={closeMenu} route={route} />
 
       <main>
-        {productivityMatch ? <Productivity categoryId={productivityMatch[1]} />
+        {productivityMatch?.[1] === 'freight' ? <Freight />
+          : productivityMatch ? <Productivity categoryId={productivityMatch[1]} />
           : podMatch ? <Pod podId={podMatch[1]} />
           : <UnloadTime />}
       </main>

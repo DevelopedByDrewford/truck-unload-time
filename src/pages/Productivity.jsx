@@ -1,33 +1,12 @@
 import { useState } from 'react'
 import { FaCoffee, FaUtensils } from 'react-icons/fa'
 import { MdCheckBox, MdCheckBoxOutlineBlank } from 'react-icons/md'
-import Wheel from '../components/Wheel'
-import { formatHour12 } from '../utils/time'
+import TimePicker from '../components/TimePicker'
+import { currentHHMM } from '../utils/clock'
 import {
   CATEGORIES, BREAK_MINUTES, LUNCH_MINUTES,
   shiftMinutes, calcGoal, formatDuration,
 } from '../utils/productivityMath'
-
-const HOURS = Array.from({ length: 24 }, (_, i) => String(i).padStart(2, '0'))
-const MINUTES = Array.from({ length: 60 }, (_, i) => String(i).padStart(2, '0'))
-
-function currentHHMM() {
-  const now = new Date()
-  return [String(now.getHours()).padStart(2, '0'), String(now.getMinutes()).padStart(2, '0')]
-}
-
-function TimePicker({ title, hour, minute, setHour, setMinute }) {
-  return (
-    <div className="picker-group">
-      <h2>{title}</h2>
-      <div className="picker-row">
-        <Wheel items={HOURS} value={hour} onChange={setHour} format={formatHour12} />
-        <span className="wheel-sep">:</span>
-        <Wheel items={MINUTES} value={minute} onChange={setMinute} />
-      </div>
-    </div>
-  )
-}
 
 function IconCheckbox({ checked, onChange, Icon, label }) {
   const Box = checked ? MdCheckBox : MdCheckBoxOutlineBlank

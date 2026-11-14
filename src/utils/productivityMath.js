@@ -1,14 +1,12 @@
 // productivityMath.js
-import { FaTshirt, FaHome } from 'react-icons/fa'
-import { GiRunningShoe } from 'react-icons/gi'
+import { FaTshirt } from 'react-icons/fa'
+import { GiCardboardBoxClosed, GiRunningShoe } from 'react-icons/gi'
 
-// Cartons per hour for each category. Change HOME_CPH once the rate is known.
-export const HOME_CPH = 4
-
+// Cartons per hour goal for each category. Freight has no fixed rate: its page calculates one.
 export const CATEGORIES = [
   { id: 'apparel', title: 'Apparel', cph: 2, Icon: FaTshirt },
   { id: 'shoes', title: 'Shoes', cph: 8, Icon: GiRunningShoe },
-  { id: 'home', title: 'Home', cph: HOME_CPH, Icon: FaHome },
+  { id: 'freight', title: 'Freight', Icon: GiCardboardBoxClosed },
 ]
 
 export const BREAK_MINUTES = 15
