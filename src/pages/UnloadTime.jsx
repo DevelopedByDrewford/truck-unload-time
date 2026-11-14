@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import heroImg from '../assets/logo512.png'
-import Wheel from '../components/Wheel'
+import NumberPicker from '../components/NumberPicker'
 import TimePicker from '../components/TimePicker'
 import { calcGoal } from '../utils/unloadMath'
 import { useI18n } from '../i18n'
@@ -40,12 +40,7 @@ function UnloadTime() {
       <div className="pickers">
         <TimePicker title={t('startTime')} hour={hour} minute={minute} setHour={setHour} setMinute={setMinute} />
 
-        <div className="picker-group">
-          <h2>{t('boxes')}</h2>
-          <div className="picker-row">
-            <Wheel items={BOX_COUNTS} value={boxes} onChange={setBoxes} />
-          </div>
-        </div>
+        <NumberPicker title={t('boxes')} items={BOX_COUNTS} value={boxes} onChange={setBoxes} />
       </div>
 
       <div className="result">

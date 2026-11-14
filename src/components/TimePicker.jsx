@@ -1,5 +1,4 @@
 import { useRef, useState } from 'react'
-import { FaKeyboard } from 'react-icons/fa'
 import Wheel from './Wheel'
 import { formatHour12 } from '../utils/time'
 import { MAX_DIGITS, parseTyped, previewTyped } from '../utils/timeEntry'
@@ -8,7 +7,7 @@ import { useI18n } from '../i18n'
 const HOURS = Array.from({ length: 24 }, (_, i) => String(i).padStart(2, '0'))
 const MINUTES = Array.from({ length: 60 }, (_, i) => String(i).padStart(2, '0'))
 
-// Scroll the wheels, or tap them (or the keyboard icon) to type the time on the number keypad.
+// Scroll the wheels, or tap them to type the time on the number keypad.
 function TimePicker({ title, hour, minute, setHour, setMinute }) {
   const { t } = useI18n()
   const inputRef = useRef(null)
@@ -73,12 +72,7 @@ function TimePicker({ title, hour, minute, setHour, setMinute }) {
 
   return (
     <div className="picker-group">
-      <h2 className="picker-title">
-        {title}
-        <button type="button" className="type-btn" onClick={startTyping} aria-label={t('typeTime', { title })}>
-          <FaKeyboard aria-hidden />
-        </button>
-      </h2>
+      <h2>{title}</h2>
 
       <div className={`picker-row${editing ? ' editing' : ''}`} onClick={startTyping}>
         <Wheel items={HOURS} value={hour} onChange={setHour} format={formatHour12} />
@@ -99,7 +93,6 @@ function TimePicker({ title, hour, minute, setHour, setMinute }) {
           onFocus={onFocus}
           onBlur={onBlur}
           onKeyDown={onKeyDown}
-          tabIndex={-1}
         />
 
         {editing && (

@@ -12,6 +12,7 @@ const STRINGS = {
     menu: 'Menu',
     language: 'Language',
     typeTime: 'Type {title}',
+    typeValue: 'Type {title} ({min}–{max})',
 
     'nav.truck': 'Truck Calculator',
     'nav.productivity': 'Productivity',
@@ -59,6 +60,7 @@ const STRINGS = {
     menu: 'Menú',
     language: 'Idioma',
     typeTime: 'Escribir {title}',
+    typeValue: 'Escribir {title} ({min}–{max})',
 
     'nav.truck': 'Calculadora de Camión',
     'nav.productivity': 'Productividad',
