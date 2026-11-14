@@ -39,6 +39,7 @@ const STRINGS = {
 
     'freight.subtitle': 'cartons per hour',
     'freight.actual': 'Actual CPH',
+    'freight.expectation': 'Minimum Expectations',
     'freight.totalTime': 'Total time: {hours} hours',
 
     'pod.title': '{name} Pod',
@@ -86,6 +87,7 @@ const STRINGS = {
 
     'freight.subtitle': 'cajas por hora',
     'freight.actual': 'CPH Real',
+    'freight.expectation': 'Metas Mínimas',
     'freight.totalTime': 'Tiempo total: {hours} horas',
 
     'pod.title': 'Pod de {name}',

@@ -70,6 +70,7 @@ function Freight() {
       </div>
 
       <ul className="expectations">
+        <h2>{t('freight.expectation')}</h2>
         {EXPECTATIONS.map(({ id, cph: rate, Icon }) => (
           <li key={id} data-page={id}>
             <Icon className="expect-icon" aria-hidden />
