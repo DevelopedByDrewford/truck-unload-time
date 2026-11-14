@@ -11,6 +11,7 @@ const STRINGS = {
     mainMenu: 'Main menu',
     menu: 'Menu',
     language: 'Language',
+    typeTime: 'Type {title}',
 
     'nav.truck': 'Truck Calculator',
     'nav.productivity': 'Productivity',
@@ -57,6 +58,7 @@ const STRINGS = {
     mainMenu: 'Menú principal',
     menu: 'Menú',
     language: 'Idioma',
+    typeTime: 'Escribir {title}',
 
     'nav.truck': 'Calculadora de Camión',
     'nav.productivity': 'Productividad',

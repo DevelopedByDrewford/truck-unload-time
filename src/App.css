@@ -163,3 +163,27 @@
 .lang-toggle button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .top-bar-title { font-size: 15px; }
 h1 { padding-inline: 16px; overflow-wrap: break-word; line-height: 1.1; }
+
+/* Type-a-time (tap the wheels or the keyboard icon) */
+.picker-title { display: inline-flex; align-items: center; gap: 4px; }
+.type-btn { display: grid; place-items: center; width: 36px; height: 36px; margin: -6px -36px -6px 0; padding: 0;
+  font-size: 18px; color: var(--text); background: transparent; border: 0; border-radius: 8px; cursor: pointer; }
+.type-btn:hover, .type-btn:focus-visible { color: var(--accent); background: var(--accent-bg); outline: none; }
+.picker-row { cursor: text; }
+
+/* Real input stays in the DOM so iPhone opens the keypad on tap; it's invisible and click-through. */
+.time-input { position: absolute; left: 0; top: 50%; width: 100%; height: 40px; transform: translateY(-50%);
+  font-size: 16px; /* ≥16px stops iPhone zooming in */ opacity: 0; border: 0; padding: 0;
+  pointer-events: none; caret-color: transparent; }
+
+.picker-row.editing .wheel { opacity: 0.25; }
+.time-entry { position: absolute; left: -8px; right: -8px; top: 50%; transform: translateY(-50%); z-index: 1;
+  display: flex; align-items: center; justify-content: center; gap: 12px; height: 52px; padding: 0 8px;
+  background: var(--bg); border: 2px solid var(--accent); border-radius: 12px; box-shadow: var(--shadow); }
+.time-entry.invalid { border-color: #ef4444; }
+.time-entry.invalid .time-entry-value { color: #ef4444; }
+.time-entry-value { font-family: var(--mono); font-size: 26px; color: var(--text-h); letter-spacing: 0.04em; }
+.ampm-toggle { display: inline-flex; gap: 2px; padding: 2px; border: 1px solid var(--border); border-radius: 999px; }
+.ampm-toggle button { min-width: 40px; min-height: 32px; padding: 0 6px; font: inherit; font-size: 13px; font-weight: 600;
+  color: var(--text); background: transparent; border: 0; border-radius: 999px; cursor: pointer; }
+.ampm-toggle button.active { color: var(--accent); background: var(--accent-bg); box-shadow: inset 0 0 0 1px var(--accent-border); }

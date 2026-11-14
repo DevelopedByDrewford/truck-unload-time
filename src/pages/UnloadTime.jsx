@@ -1,12 +1,10 @@
 import { useState, useEffect } from 'react'
 import heroImg from '../assets/logo512.png'
 import Wheel from '../components/Wheel'
-import { formatHour12 } from '../utils/time'
+import TimePicker from '../components/TimePicker'
 import { calcGoal } from '../utils/unloadMath'
 import { useI18n } from '../i18n'
 
-const HOURS = Array.from({ length: 24 }, (_, i) => String(i).padStart(2, '0'))
-const MINUTES = Array.from({ length: 60 }, (_, i) => String(i).padStart(2, '0'))
 const BOX_COUNTS = Array.from({ length: 300 }, (_, i) => i + 1)
 
 function currentHHMM() {
@@ -40,14 +38,7 @@ function UnloadTime() {
       <h1>{t('unload.title')}</h1>
 
       <div className="pickers">
-        <div className="picker-group">
-          <h2>{t('startTime')}</h2>
-          <div className="picker-row">
-            <Wheel items={HOURS} value={hour} onChange={setHour} format={formatHour12} />
-            <span className="wheel-sep">:</span>
-            <Wheel items={MINUTES} value={minute} onChange={setMinute} />
-          </div>
-        </div>
+        <TimePicker title={t('startTime')} hour={hour} minute={minute} setHour={setHour} setMinute={setMinute} />
 
         <div className="picker-group">
           <h2>{t('boxes')}</h2>
