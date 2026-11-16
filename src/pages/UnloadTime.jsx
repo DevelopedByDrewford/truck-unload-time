@@ -8,6 +8,7 @@ import { useI18n } from '../lang'
 
 // 0 means "not entered yet": the result then asks for a box count.
 const BOX_COUNTS = Array.from({ length: 301 }, (_, i) => i)
+const DEFAULT_BOXES = 180 // on a fresh load and after Clear
 const UNLOAD_RATE = 2.5 // boxes per minute
 
 function currentHHMM() {
@@ -20,12 +21,12 @@ function UnloadTime() {
   // Kept while switching pages; a refresh, closing the app, or Clear starts fresh.
   const [hour, setHour] = usePageState('unload.hour', defaultHour)
   const [minute, setMinute] = usePageState('unload.minute', defaultMinute)
-  const [boxes, setBoxes] = usePageState('unload.boxes', 180) // 180 on a fresh load; Clear sets 0
+  const [boxes, setBoxes] = usePageState('unload.boxes', DEFAULT_BOXES)
 
   const clear = () => {
     const [h, m] = currentHHMM().split(':')
     setHour(h); setMinute(m)
-    setBoxes(0)
+    setBoxes(DEFAULT_BOXES)
   }
   const { t } = useI18n()
 

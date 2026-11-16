@@ -283,6 +283,11 @@ export function LanguageProvider({ children }) {
   return <I18nContext.Provider value={{ lang, setLang, t }}>{children}</I18nContext.Provider>
 }
 
+// English text for a key, e.g. for analytics page names that shouldn't change with the language.
+export function englishText(key) {
+  return STRINGS.en[key] ?? key
+}
+
 export function useI18n() {
   return useContext(I18nContext)
 }

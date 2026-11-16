@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useState } from 'react'
 import { FaBars } from 'react-icons/fa'
 import SideMenu from './components/SideMenu'
-import { useI18n, LANGUAGES } from './lang'
+import { useI18n, LANGUAGES, englishText } from './lang'
+import { trackEvent, trackPageView } from './analytics'
 import UnloadTime from './pages/UnloadTime'
 import Pod from './pages/Pod'
 import Freight from './pages/Freight'
@@ -50,6 +51,16 @@ function App() {
   const podMatch = route.match(/^#\/pod\/(\w+)/)
   const page = ProductivityPage ? productivityId : podMatch ? `pod-${podMatch[1]}` : 'unload'
 
+  // Analytics: one page view per page shown (English page name, plus the language in use).
+  const pageTitle = ProductivityPage ? englishText(`cat.${productivityId}`)
+    : podMatch ? englishText('pod.title').replace('{name}', englishText(`cat.${podMatch[1]}`))
+    : englishText('nav.truck')
+  useEffect(() => {
+    trackPageView(route, pageTitle, lang)
+    // Only on page changes; a language switch is tracked as its own event below.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [route])
+
   // Per-page color theme (see App.css); also tint the mobile browser bar to match.
   useEffect(() => {
     const root = document.documentElement
@@ -78,7 +89,10 @@ function App() {
               role="radio"
               aria-checked={code === lang}
               className={code === lang ? 'active' : ''}
-              onClick={() => setLang(code)}
+              onClick={() => {
+                if (code !== lang) trackEvent('select_language', { language: code })
+                setLang(code)
+              }}
               lang={code}
             >
               {label}
