@@ -1,6 +1,7 @@
 // productivityMath.js
-import { FaTshirt } from 'react-icons/fa'
-import { GiCardboardBoxClosed, GiRunningShoe } from 'react-icons/gi'
+import { FaBitbucket, FaTshirt } from 'react-icons/fa'
+import { FaBasketShopping } from 'react-icons/fa6'
+import { GiCardboardBoxClosed, GiClothes, GiRunningShoe } from 'react-icons/gi'
 
 // Cartons per hour goal for each category. Freight has no fixed rate: its page calculates one.
 export const CATEGORIES = [
@@ -8,7 +9,13 @@ export const CATEGORIES = [
   { id: 'apparel', title: 'Apparel', cph: 2, Icon: FaTshirt },
   { id: 'shoes', title: 'Shoes', cph: 8, Icon: GiRunningShoe },
   { id: 'freight', title: 'Freight', Icon: GiCardboardBoxClosed },
+  { id: 'hummers', title: 'Mini Hummers', Icon: FaBasketShopping }, // wire basket
+  { id: 'zracks', title: 'Z Racks', Icon: GiClothes },
+  { id: 'bluebins', title: 'Blue Bins', Icon: FaBitbucket },
 ]
+
+// Productivity pages shown on the site (in menu order). Apparel/Shoes pages are off for now.
+export const SITE_PRODUCTIVITY = ['freight', 'hummers', 'zracks', 'bluebins']
 
 export const BREAK_MINUTES = 15
 export const LUNCH_MINUTES = 30

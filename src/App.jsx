@@ -5,16 +5,25 @@ import { useI18n, LANGUAGES } from './lang'
 import UnloadTime from './pages/UnloadTime'
 import Pod from './pages/Pod'
 import Freight from './pages/Freight'
+import RunsPage from './pages/RunsPage'
+import { SITE_PRODUCTIVITY } from './utils/productivityMath'
 import './App.css'
 
-// Hash routes: "#/" (truck calculator), "#/productivity/freight" and "#/pod/<type>".
+// Hash routes: "#/" (truck calculator), "#/productivity/<freight|hummers|zracks|bluebins>" and "#/pod/<type>".
 // Apparel/Shoes productivity pages are off the site for now (pages/Productivity.jsx is kept),
-// so any old "#/productivity/..." link is redirected to Freight.
+// so any other "#/productivity/..." link is redirected to Freight.
+const PRODUCTIVITY_PAGES = {
+  freight: Freight,
+  hummers: () => <RunsPage pageId="hummers" />,
+  zracks: () => <RunsPage pageId="zracks" />,
+  bluebins: () => <RunsPage pageId="bluebins" />,
+}
 const FREIGHT_ROUTE = '#/productivity/freight'
 
 function currentRoute() {
   const hash = window.location.hash
-  if (hash.startsWith('#/productivity/') && hash !== FREIGHT_ROUTE) {
+  const match = hash.match(/^#\/productivity\/(\w+)$/)
+  if (hash.startsWith('#/productivity/') && !(match && SITE_PRODUCTIVITY.includes(match[1]))) {
     window.history.replaceState(null, '', FREIGHT_ROUTE)
     return FREIGHT_ROUTE
   }
@@ -36,9 +45,10 @@ function App() {
     return () => window.removeEventListener('hashchange', onHash)
   }, [])
 
-  const isFreight = route === FREIGHT_ROUTE
+  const productivityId = route.match(/^#\/productivity\/(\w+)$/)?.[1]
+  const ProductivityPage = PRODUCTIVITY_PAGES[productivityId]
   const podMatch = route.match(/^#\/pod\/(\w+)/)
-  const page = isFreight ? 'freight' : podMatch ? `pod-${podMatch[1]}` : 'unload'
+  const page = ProductivityPage ? productivityId : podMatch ? `pod-${podMatch[1]}` : 'unload'
 
   // Per-page color theme (see App.css); also tint the mobile browser bar to match.
   useEffect(() => {
@@ -80,7 +90,7 @@ function App() {
       <SideMenu open={menuOpen} onClose={closeMenu} route={route} />
 
       <main>
-        {isFreight ? <Freight />
+        {ProductivityPage ? <ProductivityPage key={productivityId} />
           : podMatch ? <Pod key={podMatch[1]} podId={podMatch[1]} />
           : <UnloadTime />}
       </main>
