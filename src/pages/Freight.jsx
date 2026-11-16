@@ -1,10 +1,12 @@
-import usePersistentState from '../hooks/usePersistentState'
+import usePageState from '../hooks/usePageState'
+import ClearButton from '../components/ClearButton'
 import { FaCheckCircle, FaCoffee, FaTimesCircle, FaUtensils } from 'react-icons/fa'
 import TimePicker from '../components/TimePicker'
 import IconCheckbox from '../components/IconCheckbox'
 import { currentHHMM } from '../utils/clock'
 import { useI18n } from '../lang'
 import { CATEGORIES, BREAK_MINUTES, LUNCH_MINUTES, shiftMinutes } from '../utils/productivityMath'
+import { formatTime, toMinutes } from '../utils/unloadMath'
 
 const freight = CATEGORIES.find(c => c.id === 'freight')
 // Expected box counts shown for the same amount of time, at each category's goal rate.
@@ -13,14 +15,22 @@ const EXPECTATIONS = ['apparel', 'shoes'].map(id => CATEGORIES.find(c => c.id ==
 // Freight: work out cartons per hour from start time, end time and boxes done.
 function Freight() {
   const [nowH, nowM] = currentHHMM()
-  // Saved, so the inputs are still here when you come back to Freight.
-  const [startHour, setStartHour] = usePersistentState('freight.startHour', nowH)
-  const [startMinute, setStartMinute] = usePersistentState('freight.startMinute', nowM)
-  const [endHour, setEndHour] = usePersistentState('freight.endHour', nowH)
-  const [endMinute, setEndMinute] = usePersistentState('freight.endMinute', nowM)
-  const [boxes, setBoxes] = usePersistentState('freight.boxes', '')
-  const [breakTaken, setBreakTaken] = usePersistentState('freight.break', false)
-  const [lunchTaken, setLunchTaken] = usePersistentState('freight.lunch', false)
+  // Kept while switching pages; a refresh, closing the app, or Clear starts fresh.
+  const [startHour, setStartHour] = usePageState('freight.startHour', nowH)
+  const [startMinute, setStartMinute] = usePageState('freight.startMinute', nowM)
+  const [endHour, setEndHour] = usePageState('freight.endHour', nowH)
+  const [endMinute, setEndMinute] = usePageState('freight.endMinute', nowM)
+  const [boxes, setBoxes] = usePageState('freight.boxes', '')
+  const [breakTaken, setBreakTaken] = usePageState('freight.break', false)
+  const [lunchTaken, setLunchTaken] = usePageState('freight.lunch', false)
+
+  const clear = () => {
+    const [h, m] = currentHHMM()
+    setStartHour(h); setStartMinute(m)
+    setEndHour(h); setEndMinute(m)
+    setBoxes('')
+    setBreakTaken(false); setLunchTaken(false)
+  }
   const { t } = useI18n()
 
   const minutes = shiftMinutes(`${startHour}:${startMinute}`, `${endHour}:${endMinute}`, { breakTaken, lunchTaken })
@@ -72,7 +82,13 @@ function Freight() {
         <p className="result-label">{t('freight.actual')}</p>
         <h2 className="result-big">{cph === null ? '—' : round2(cph)}</h2>
         <p>{t('freight.totalTime', { hours: round2(hours) })}</p>
+        <p className="result-span">{t('freight.span', {
+          start: formatTime(toMinutes(`${startHour}:${startMinute}`)),
+          end: formatTime(toMinutes(`${endHour}:${endMinute}`)),
+        })}</p>
       </div>
+
+      <ClearButton onClear={clear} />
 
       <ul className="expectations">
         <h2>{t('freight.expectation')}</h2>

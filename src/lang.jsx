@@ -11,6 +11,7 @@ const STRINGS = {
     mainMenu: 'Main menu',
     menu: 'Menu',
     language: 'Language',
+    clear: 'Clear',
     typeTime: 'Type {title}',
     typeValue: 'Type {title} ({min}–{max})',
 
@@ -42,6 +43,7 @@ const STRINGS = {
     'freight.actual': 'Actual CPH',
     'freight.expectation': 'Minimum Expectations',
     'freight.totalTime': 'Total time: {hours} hours',
+    'freight.span': 'Start {start} · Finish {end}',
     'freight.pass': 'Meets CPH',
     'freight.fail': 'Below CPH',
 
@@ -62,6 +64,7 @@ const STRINGS = {
     mainMenu: 'Menú principal',
     menu: 'Menú',
     language: 'Idioma',
+    clear: 'Borrar',
     typeTime: 'Escribir {title}',
     typeValue: 'Escribir {title} ({min}–{max})',
 
@@ -92,6 +95,7 @@ const STRINGS = {
     'freight.actual': 'CPH Real',
     'freight.expectation': 'Metas Mínimas',
     'freight.totalTime': 'Tiempo total: {hours} horas',
+    'freight.span': 'Inicio {start} · Fin {end}',
     'freight.pass': 'Cumple el CPH',
     'freight.fail': 'Por debajo del CPH',
 
@@ -113,6 +117,7 @@ const STRINGS = {
     mainMenu: 'مرکزی مینو',
     menu: 'مینو',
     language: 'زبان',
+    clear: 'صاف کریں',
     typeTime: '{title} ٹائپ کریں',
     typeValue: '{title} ٹائپ کریں ({min}–{max})',
 
@@ -144,6 +149,7 @@ const STRINGS = {
     'freight.actual': 'اصل CPH',
     'freight.expectation': 'کم از کم توقعات',
     'freight.totalTime': 'کل وقت: {hours} گھنٹے',
+    'freight.span': 'شروع {start} · ختم {end}',
     'freight.pass': 'CPH پورا ہے',
     'freight.fail': 'CPH سے کم',
 

@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react'
+import usePageState from '../hooks/usePageState'
+import ClearButton from '../components/ClearButton'
 import { FaCoffee, FaMinus, FaPlus } from 'react-icons/fa'
 import { MdCheckBox, MdCheckBoxOutlineBlank } from 'react-icons/md'
 import {
@@ -19,8 +20,6 @@ function BreakCheckbox({ checked, onChange, label }) {
   )
 }
 
-const STORAGE_KEY = 'podState'
-
 function blankPodState(pod) {
   return {
     unitId: pod.units[0].id,
@@ -30,25 +29,12 @@ function blankPodState(pod) {
   }
 }
 
-// Saved values for every pod page, e.g. { apparel: {...}, shoes: {...} }.
-function loadAll() {
-  try {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY)) ?? {}
-  } catch {
-    return {}
-  }
-}
-
-// Each pod page keeps its own unit, per-unit counts, people and breaks,
-// saved in localStorage so they survive switching pages, units, or reloading.
+// Each pod page keeps its own unit, per-unit counts, people and breaks while you
+// switch pages or units; a refresh, closing the app, or Clear starts fresh.
 function Pod({ podId }) {
   const pod = POD_TYPES.find(p => p.id === podId) ?? POD_TYPES[0]
-  const [all, setAll] = useState(loadAll)
+  const [all, setAll] = usePageState('pods', {})
   const { t } = useI18n()
-
-  useEffect(() => {
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(all)) } catch { /* storage unavailable */ }
-  }, [all])
 
   const blank = blankPodState(pod)
   const saved = all[pod.id] ?? {}
@@ -63,6 +49,8 @@ function Pod({ podId }) {
   const breakCount = breaks.slice(0, people).filter(Boolean).length
   const hours = podHours(Number(quantity), unit.rate, people, breakCount)
   const pods = pod.peoplePerPod ? people / pod.peoplePerPod : null
+
+  const clear = () => setAll(a => ({ ...a, [pod.id]: blankPodState(pod) }))
 
   const setBreak = (i, val) => update({ breaks: breaks.map((x, j) => (j === i ? val : x)) })
 
@@ -136,6 +124,8 @@ function Pod({ podId }) {
         <p>{formatDuration(Math.round(hours * 60))}</p>
         {pods !== null && <p className="pods">{pods} {t(pods === 1 ? 'pod.pod' : 'pod.pods')}</p>}
       </div>
+
+      <ClearButton onClear={clear} />
     </>
   )
 }

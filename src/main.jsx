@@ -4,6 +4,15 @@ import './index.css'
 import App from './App.jsx'
 import { LanguageProvider } from './lang'
 
+// Page inputs used to be saved in localStorage; they now live in memory only. Remove old copies.
+try {
+  for (const key of Object.keys(localStorage)) {
+    if (key === 'podState' || key === 'rate' || key.startsWith('freight.') || key.startsWith('unload.')) {
+      localStorage.removeItem(key)
+    }
+  }
+} catch { /* storage unavailable */ }
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <LanguageProvider>

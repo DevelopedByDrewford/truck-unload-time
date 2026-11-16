@@ -9,14 +9,16 @@
 
 /* Wheel  */
 .wheel { overflow-y: scroll; scroll-snap-type: y mandatory; scrollbar-width: none;
-  mask-image: linear-gradient(transparent, #000 35%, #000 65%, transparent); }
+  mask-image: linear-gradient(transparent, #000 30%, #000 70%, transparent); }
 .wheel::-webkit-scrollbar { display: none; }
-.wheel-item { scroll-snap-align: center; display: grid; place-items: center; width: 80px;
+.wheel-item { scroll-snap-align: center; display: grid; place-items: center;
+  width: clamp(56px, 18vw, 80px); /* narrower on small phones so pickers fit side by side */
   font-family: var(--mono); color: var(--text-h); }
 
 .hero { width: 120px; margin: 24px auto 0; display: block; }
 
-.pickers { display: flex; justify-content: center; gap: 48px; margin: 24px 0; flex-wrap: wrap; }
+/* Pickers always sit side by side; the gap shrinks on small phones instead of wrapping */
+.pickers { display: flex; justify-content: center; gap: clamp(12px, 6vw, 48px); margin: 24px 0; padding: 0 8px; flex-wrap: nowrap; }
 .picker-group { display: flex; flex-direction: column; align-items: center; }
 .picker-row { display: flex; align-items: center; gap: 4px; position: relative; }
 .wheel-sep { font-family: var(--mono); font-size: 20px; color: var(--text); }
@@ -223,3 +225,22 @@ h1 { padding-inline: 16px; overflow-wrap: break-word; line-height: 1.1; }
 .lang-toggle button[lang="ur"] { font-weight: 500; font-size: 14px; }
 /* Urdu reads better in the regular font than in monospace */
 :root[lang="ur"] .result p, :root[lang="ur"] .rate, :root[lang="ur"] .expect-rate { font-family: var(--sans); }
+
+/* Clear button (resets the current page) */
+.clear-row { display: flex; justify-content: center; margin: 0 16px 32px; }
+.clear-btn { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 20px;
+  font: inherit; font-size: 16px; color: var(--text-h); background: transparent;
+  border: 1px solid var(--border); border-radius: 999px; cursor: pointer; }
+.clear-btn svg { font-size: 20px; color: var(--accent); }
+.clear-btn:hover { background: var(--accent-bg); border-color: var(--accent-border); }
+.clear-btn:active { transform: scale(0.97); }
+.clear-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* Small phones: keep the typing box (time + AM/PM) inside its narrower picker */
+@media (max-width: 400px) {
+  .time-entry { gap: 6px; padding: 0 6px; }
+  .time-entry-value { font-size: 22px; letter-spacing: 0; }
+  .ampm-toggle button { min-width: 34px; padding: 0 4px; font-size: 12px; }
+}
+.result .result-span { margin-top: 2px; font-size: 14px; }
+:root[lang="ur"] .result .result-span { font-family: var(--sans); }

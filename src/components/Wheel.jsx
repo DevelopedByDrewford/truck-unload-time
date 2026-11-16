@@ -1,6 +1,7 @@
 import { useRef, useLayoutEffect } from 'react'
 
-function Wheel({ items, value, onChange, itemHeight = 40, format = it => it }) {
+// `visible` rows are shown (odd number); the middle one is the selected value.
+function Wheel({ items, value, onChange, itemHeight = 40, visible = 3, format = it => it }) {
   const ref = useRef(null)
   const timer = useRef()
   const mounted = useRef(false)
@@ -19,6 +20,9 @@ function Wheel({ items, value, onChange, itemHeight = 40, format = it => it }) {
     else el.scrollTop = top
   }, [items, value, itemHeight])
 
+  // Spacer above/below so the first and last items can reach the middle row
+  const pad = itemHeight * ((visible - 1) / 2)
+
   const handleScroll = () => {
     clearTimeout(timer.current)
     timer.current = setTimeout(() => {
@@ -28,12 +32,12 @@ function Wheel({ items, value, onChange, itemHeight = 40, format = it => it }) {
   }
 
   return (
-    <div ref={ref} onScroll={handleScroll} className="wheel" style={{ height: itemHeight * 5 }}>
-      <div style={{ height: itemHeight * 2 }} />
+    <div ref={ref} onScroll={handleScroll} className="wheel" style={{ height: itemHeight * visible }}>
+      <div style={{ height: pad }} />
       {items.map(it => (
         <div key={it} className="wheel-item" style={{ height: itemHeight }}>{format(it)}</div>
       ))}
-      <div style={{ height: itemHeight * 2 }} />
+      <div style={{ height: pad }} />
     </div>
   )
 }

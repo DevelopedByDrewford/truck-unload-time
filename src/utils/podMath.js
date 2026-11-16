@@ -24,7 +24,7 @@ export const POD_TYPES = [
   },
 ]
 
-export const DEFAULT_PEOPLE = 2
+export const DEFAULT_PEOPLE = 1 // starting/cleared value; 2 people make a full pod
 export const MAX_PEOPLE = 10
 export const POD_BREAK_MINUTES = 15
 

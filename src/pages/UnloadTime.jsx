@@ -1,11 +1,14 @@
-import usePersistentState from '../hooks/usePersistentState'
+import usePageState from '../hooks/usePageState'
+import ClearButton from '../components/ClearButton'
 import heroImg from '../assets/logo512.png'
 import NumberPicker from '../components/NumberPicker'
 import TimePicker from '../components/TimePicker'
 import { calcGoal } from '../utils/unloadMath'
 import { useI18n } from '../lang'
 
-const BOX_COUNTS = Array.from({ length: 300 }, (_, i) => i + 1)
+// 0 means "not entered yet": the result then asks for a box count.
+const BOX_COUNTS = Array.from({ length: 301 }, (_, i) => i)
+const UNLOAD_RATE = 2.5 // boxes per minute
 
 function currentHHMM() {
   const now = new Date()
@@ -14,15 +17,20 @@ function currentHHMM() {
 
 function UnloadTime() {
   const [defaultHour, defaultMinute] = currentHHMM().split(':')
-  // Saved, so the inputs are still here when you come back to this page.
-  const [hour, setHour] = usePersistentState('unload.hour', defaultHour)
-  const [minute, setMinute] = usePersistentState('unload.minute', defaultMinute)
-  const [boxes, setBoxes] = usePersistentState('unload.boxes', 180)
-  const [rate] = usePersistentState('rate', 2.5)
+  // Kept while switching pages; a refresh, closing the app, or Clear starts fresh.
+  const [hour, setHour] = usePageState('unload.hour', defaultHour)
+  const [minute, setMinute] = usePageState('unload.minute', defaultMinute)
+  const [boxes, setBoxes] = usePageState('unload.boxes', 180) // 180 on a fresh load; Clear sets 0
+
+  const clear = () => {
+    const [h, m] = currentHHMM().split(':')
+    setHour(h); setMinute(m)
+    setBoxes(0)
+  }
   const { t } = useI18n()
 
   const start = `${hour}:${minute}`
-  const result = calcGoal(start, Number(boxes), rate)
+  const result = calcGoal(start, Number(boxes), UNLOAD_RATE)
 
   return (
     <>
@@ -45,6 +53,8 @@ function UnloadTime() {
           <p>{t('unload.pick')}</p>
         )}
       </div>
+
+      <ClearButton onClear={clear} />
     </>
   )
 }
