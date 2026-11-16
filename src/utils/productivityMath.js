@@ -4,6 +4,7 @@ import { GiCardboardBoxClosed, GiRunningShoe } from 'react-icons/gi'
 
 // Cartons per hour goal for each category. Freight has no fixed rate: its page calculates one.
 export const CATEGORIES = [
+  // Standard Apparel/Shoes CPH, used for Freight's expectations.
   { id: 'apparel', title: 'Apparel', cph: 2, Icon: FaTshirt },
   { id: 'shoes', title: 'Shoes', cph: 8, Icon: GiRunningShoe },
   { id: 'freight', title: 'Freight', Icon: GiCardboardBoxClosed },

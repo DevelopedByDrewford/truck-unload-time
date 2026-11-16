@@ -3,7 +3,7 @@ import ClearButton from '../components/ClearButton'
 import { FaCoffee, FaMinus, FaPlus } from 'react-icons/fa'
 import { MdCheckBox, MdCheckBoxOutlineBlank } from 'react-icons/md'
 import {
-  POD_TYPES, DEFAULT_PEOPLE, MAX_PEOPLE, POD_BREAK_MINUTES, podHours,
+  POD_TYPES, DEFAULT_PEOPLE, MAX_PEOPLE, MAX_CPH, POD_BREAK_MINUTES, podHours, unitRate,
 } from '../utils/podMath'
 import { formatDuration } from '../utils/productivityMath'
 import { useI18n } from '../lang'
@@ -34,6 +34,8 @@ function blankPodState(pod) {
 function Pod({ podId }) {
   const pod = POD_TYPES.find(p => p.id === podId) ?? POD_TYPES[0]
   const [all, setAll] = usePageState('pods', {})
+  // This pod page's own CPH: starts at the default, kept while switching pages, reset by Clear/refresh.
+  const [cph, setCph] = usePageState(`cph.${pod.id}`, pod.cph)
   const { t } = useI18n()
 
   const blank = blankPodState(pod)
@@ -47,10 +49,17 @@ function Pod({ podId }) {
   const setQuantity = val => update({ quantities: { ...state.quantities, [unit.id]: val } })
   const setPeople = fn => update({ people: fn(people) })
   const breakCount = breaks.slice(0, people).filter(Boolean).length
-  const hours = podHours(Number(quantity), unit.rate, people, breakCount)
+  const hours = podHours(Number(quantity), unitRate(unit, cph), people, breakCount)
   const pods = pod.peoplePerPod ? people / pod.peoplePerPod : null
 
-  const clear = () => setAll(a => ({ ...a, [pod.id]: blankPodState(pod) }))
+  // Step the CPH (0.5 for apparel, 1 for shoes), snapped to the step to avoid float drift.
+  const step = pod.cphStep
+  const stepCph = dir => setCph(c => Math.min(MAX_CPH, Math.max(step, Math.round((c + dir * step) / step) * step)))
+
+  const clear = () => {
+    setAll(a => ({ ...a, [pod.id]: blankPodState(pod) }))
+    setCph(pod.cph)
+  }
 
   const setBreak = (i, val) => update({ breaks: breaks.map((x, j) => (j === i ? val : x)) })
 
@@ -62,7 +71,7 @@ function Pod({ podId }) {
         </div>
         <div className='header-box__contents--titles'>
           <h1>{t('pod.title', { name: t(`cat.${pod.id}`) })}</h1>
-          <p className="rate">{pod.rate}</p>
+          <p className="rate">{cph} CPH</p>
         </div>
       </div>
       <div className="pod-form">
@@ -80,17 +89,35 @@ function Pod({ podId }) {
           ))}
         </div>
 
-        <label className="field">
-          <h2>{t(`unit.${unit.id}`)}</h2>
-          <input
-            type="number"
-            inputMode="numeric"
-            min="0"
-            placeholder="0"
-            value={quantity}
-            onChange={e => setQuantity(e.target.value)}
-          />
-        </label>
+        {/* Count and CPH share a row */}
+        <div className="field-row">
+          <label className="field">
+            <h2>{t(`unit.${unit.id}`)}</h2>
+            <input
+              type="number"
+              inputMode="numeric"
+              min="0"
+              placeholder="0"
+              value={quantity}
+              onChange={e => setQuantity(e.target.value)}
+            />
+          </label>
+
+          <div className="field">
+            <h2>CPH</h2>
+            <div className="stepper">
+              <button className="icon-btn" onClick={() => stepCph(-1)}
+                disabled={cph <= step} aria-label={t('pod.lowerCph')}>
+                <FaMinus aria-hidden />
+              </button>
+              <output aria-live="polite">{cph}</output>
+              <button className="icon-btn" onClick={() => stepCph(1)}
+                disabled={cph >= MAX_CPH} aria-label={t('pod.raiseCph')}>
+                <FaPlus aria-hidden />
+              </button>
+            </div>
+          </div>
+        </div>
 
         <div className="field">
           <h2>{t('pod.people')}</h2>

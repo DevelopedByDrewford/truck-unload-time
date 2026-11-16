@@ -244,3 +244,7 @@ h1 { padding-inline: 16px; overflow-wrap: break-word; line-height: 1.1; }
 }
 .result .result-span { margin-top: 2px; font-size: 14px; }
 :root[lang="ur"] .result .result-span { font-family: var(--sans); }
+
+/* Two fields side by side (pod pages: count + CPH) */
+.field-row { display: flex; justify-content: center; align-items: flex-end; gap: clamp(12px, 5vw, 32px); flex-wrap: nowrap; }
+.field-row .field input { width: clamp(110px, 34vw, 160px); height: 50px; } /* same height as the stepper so labels line up */

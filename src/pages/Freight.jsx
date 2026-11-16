@@ -9,7 +9,8 @@ import { CATEGORIES, BREAK_MINUTES, LUNCH_MINUTES, shiftMinutes } from '../utils
 import { formatTime, toMinutes } from '../utils/unloadMath'
 
 const freight = CATEGORIES.find(c => c.id === 'freight')
-// Expected box counts shown for the same amount of time, at each category's goal rate.
+// Expected box counts shown for the same amount of time, at each department's standard CPH
+// (fixed here; CPH edits on the pod pages only affect that pod page).
 const EXPECTATIONS = ['apparel', 'shoes'].map(id => CATEGORIES.find(c => c.id === id))
 
 // Freight: work out cartons per hour from start time, end time and boxes done.

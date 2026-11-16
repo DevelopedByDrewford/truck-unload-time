@@ -81,7 +81,7 @@ function App() {
 
       <main>
         {isFreight ? <Freight />
-          : podMatch ? <Pod podId={podMatch[1]} />
+          : podMatch ? <Pod key={podMatch[1]} podId={podMatch[1]} />
           : <UnloadTime />}
       </main>
     </>
