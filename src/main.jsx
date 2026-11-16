@@ -7,7 +7,8 @@ import { LanguageProvider } from './lang'
 // Page inputs used to be saved in localStorage; they now live in memory only. Remove old copies.
 try {
   for (const key of Object.keys(localStorage)) {
-    if (key === 'podState' || key === 'rate' || key.startsWith('freight.') || key.startsWith('unload.')) {
+    // 'lang' was saved automatically (even without a choice); it's replaced by 'langChoice'.
+    if (key === 'podState' || key === 'rate' || key === 'lang' || key.startsWith('freight.') || key.startsWith('unload.')) {
       localStorage.removeItem(key)
     }
   }

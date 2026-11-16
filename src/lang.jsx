@@ -220,28 +220,54 @@ export const LANGUAGES = [
   { code: 'ur', label: 'اردو', dir: 'rtl' },
 ]
 const CODES = LANGUAGES.map(l => l.code)
-const STORAGE_KEY = 'lang'
+// Only a language the person picked (tapping EN / ES / اردو) is saved. Until then the app
+// follows the phone/browser language settings, including if they change later.
+const CHOICE_KEY = 'langChoice'
 
-function initialLang() {
+function savedChoice() {
   try {
-    const saved = localStorage.getItem(STORAGE_KEY)
-    if (CODES.includes(saved)) return saved
-  } catch { /* storage unavailable */ }
-  const device = navigator.language?.toLowerCase().slice(0, 2)
-  return CODES.includes(device) ? device : 'en'
+    const saved = localStorage.getItem(CHOICE_KEY)
+    return CODES.includes(saved) ? saved : null
+  } catch {
+    return null // storage unavailable
+  }
+}
+
+// First supported language in the browser's preference list, e.g. ["en-GB", "es-MX"] → "en",
+// ["fr-FR", "es-US"] → "es". English if none of them is supported.
+export function browserLang(prefs = navigator.languages?.length ? navigator.languages : [navigator.language]) {
+  for (const tag of prefs) {
+    const code = tag?.toLowerCase().split('-')[0]
+    if (CODES.includes(code)) return code
+  }
+  return 'en'
 }
 
 const I18nContext = createContext(null)
 
 export function LanguageProvider({ children }) {
-  const [lang, setLang] = useState(initialLang)
+  const [choice, setChoice] = useState(savedChoice)
+  const [browser, setBrowser] = useState(() => browserLang())
+  const lang = choice ?? browser
+
+  // Follow changes to the device language while the app is open (if nothing was picked).
+  useEffect(() => {
+    const onChange = () => setBrowser(browserLang())
+    window.addEventListener('languagechange', onChange)
+    return () => window.removeEventListener('languagechange', onChange)
+  }, [])
 
   useEffect(() => {
     document.documentElement.lang = lang
     // Urdu reads right-to-left; the whole layout mirrors (see App.css for the parts that stay LTR).
     document.documentElement.dir = LANGUAGES.find(l => l.code === lang)?.dir ?? 'ltr'
-    try { localStorage.setItem(STORAGE_KEY, lang) } catch { /* storage unavailable */ }
   }, [lang])
+
+  // Picking a language on the toggle saves it, and it then wins over the browser setting.
+  const setLang = code => {
+    setChoice(code)
+    try { localStorage.setItem(CHOICE_KEY, code) } catch { /* storage unavailable */ }
+  }
 
   const rtl = LANGUAGES.find(l => l.code === lang)?.dir === 'rtl'
 
